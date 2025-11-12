@@ -1,39 +1,43 @@
-let express = require('express');
-let cors = require('cors');
-let mongoose = require('mongoose');
-let path = require('path')
-
-
-
-let app = express();
-
-let multer = require('multer')
-
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const path = require('path');
 require('dotenv').config();
 
+const userRouter = require('./routes/user.js');
+const app = express();
 
-let userRouter = require('./routes/user.js')
+const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL || 'https://jauth.jagadesh31.tech';
 
-;
+// Use simpler CORS configuration first (like your working version)
+app.use(cors({
+  origin: CLIENT_BASE_URL,
+  credentials: true
+}));
 
-app.use(cors());
 app.use(express.json());
-app.use('/user',userRouter);
 
-
-
-let port = process.env.PORT || 5001
-
-console.log(process.env.MONGO_URL)
-mongoose.connect(process.env.MONGO_URL)
-  .then(()=>{
-    console.log('mongodb Connected successfully');
-    app.listen(port,()=>{
-      console.log(`listening to : http://localhost:${port}`)
-    })
-  }).catch((err) => {
-  console.log('error connecting to mongodb:' + err);
+// Routes
+app.get('/', (req, res) => {
+  res.status(200).json({
+    message: 'Jauth Backend is running!',
+    server: 'jauth-server.jagadesh31.tech'
+  });
 });
 
+app.use('/user', userRouter);
 
+const port = process.env.PORT || 5001;
 
+console.log(process.env.MONGO_URL);
+
+mongoose.connect(process.env.MONGO_URL)
+  .then(() => {
+    console.log('MongoDB connected successfully');
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.log('Error connecting to MongoDB: ' + err);
+  });

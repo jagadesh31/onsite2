@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const {
-    createLink,
-    verifyLink,
+    // createLink,
+    // verifyLink,
     registerUser,
     loginUser,
     userInfo,
@@ -24,8 +24,8 @@ router.get('/userInfo', userInfo);
 router.post('/refresh-token', refreshToken);
 
 // Verification routes
-router.get('/createLink', createLink);
-router.get('/verifyLink/callback', verifyLink);
+// router.get('/createLink', createLink);
+// router.get('/verifyLink/callback', verifyLink);
 
 // App management routes
 router.get('/getApps', getApps);
